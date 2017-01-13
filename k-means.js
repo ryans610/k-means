@@ -1,14 +1,12 @@
 /*k-means clustering*/
 var Kmeans=(function namespace(){
     function init(k,data,attributes,initMethod){
-        config=Object.assign({
-            k:k,
-            data:data,
-            attributes:attributes,
-            groups:[],
-            initMethod:initMethod||0,
-            oldCentroid:[],
-        },config);
+        config.k=k;
+        config.data=data;
+        config.attributes=attributes;
+        config.initMethod=initMethod;
+        config.groups=[];
+        config.oldCentroid=[];
         config.groups.length=k;
         for(var i=0;i<k;i++){
             config.groups[i]=[];
@@ -120,13 +118,13 @@ var Kmeans=(function namespace(){
     };
     /*PrivateAttribute*/
     var config={
-        k:0,
-        data:[],
-        attributes:[],
-        groups:[],
-        oldCentroid:[],
-        centroid:[],
-        initMethod:-1,
+        k:null,
+        data:null,
+        attributes:null,
+        groups:null,
+        oldCentroid:null,
+        centroid:null,
+        initMethod:null,
     };
     return init;
 }());
