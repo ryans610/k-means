@@ -114,9 +114,9 @@ var Kmeans=(function namespace(){
     }
     /*PublicAttribute*/
     init.initOption={
-        Assign:0,
-        Forgy:1,
-        RandomPartition:2,
+        Assign:"Assign",
+        Forgy:"Forgy",
+        RandomPartition:"RandomPartition",
     };
     /*PrivateAttribute*/
     var config={
