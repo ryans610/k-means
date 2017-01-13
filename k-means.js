@@ -1,15 +1,18 @@
 /*k-means clustering*/
 var Kmeans=(function namespace(){
     function init(k,data,attributes,initMethod){
-        config.k=k;
-        config.data=data;
-        config.attributes=attributes;
+        config=Object.assign({
+            k:k,
+            data:data,
+            attributes:attributes,
+            groups:[],
+            initMethod:initMethod||0,
+            oldCentroid:[],
+        },config);
         config.groups.length=k;
         for(var i=0;i<k;i++){
             config.groups[i]=[];
         }
-        config.initMethod=initMethod||0;
-        config.oldCentroid=[];
     }
     /*PublicMethod*/
     init.prototype.initialize=function(centroid){
