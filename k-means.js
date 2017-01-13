@@ -15,6 +15,22 @@ var Kmeans=(function namespace(){
     init.prototype.initialize=function(centroid){
         if(config.initMethod==init.initOption.Assign){
             config.centroid=centroid;
+        }else if(config.initMethod==init.initOption.Forgy){
+            config.centroid=[];
+            var arr=config.data.slice();
+            while(config.centroid.length!=config.k){
+                var i=Math.floor(Math.random()*arr.length);
+                if(!config.centroid.includes(i)){
+                    config.centroid.push(i);
+                    arr.splice(arr.indexOf(i),1);
+                }
+            }
+        }else if(config.initMethod==init.initOption.RandomPartition){
+            config.centroid=[];
+            for(var i=0;i<config.data.length;i++){
+                config.groups[Math.floor(Math.random()*config.k)].push(i);
+            }
+            init.prototype.update();
         }
     };
     init.prototype.assignment=function(){
