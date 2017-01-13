@@ -9,6 +9,7 @@ var Kmeans=(function namespace(){
             config.groups[i]=[];
         }
         config.initMethod=initMethod||0;
+        config.oldCentroid=[];
     }
     /*PublicMethod*/
     init.prototype.initialize=function(centroid){
@@ -17,6 +18,11 @@ var Kmeans=(function namespace(){
         }
     };
     init.prototype.assignment=function(){
+        //reset groups
+        for(var i=0;i<config.k;i++){
+            config.groups[i].length=0;
+        }
+        //assignment
         for(var i=0;i<config.data.length;i++){
             var min=Infinity;
             var minj=-1;
@@ -31,6 +37,7 @@ var Kmeans=(function namespace(){
         }
     };
     init.prototype.update=function(){
+        //reset centroid
         config.oldCentroid=config.centroid.slice();
         config.centroid.length=0;
         config.centroid.length=config.k;
@@ -46,17 +53,37 @@ var Kmeans=(function namespace(){
                 sum/=config.attributes.length;
                 mean[config.attributes[j]]=sum;
             }
+            //get centroid
             var min=Infinity;
             var minj=-1;
             for(var j=0;j<config.data.length;j++){
                 var d=getDistance(mean,config.data[j]);
-                if(d<min){
+                if(d<min&&!config.centroid.includes(j)){
                     min=d;
                     minj=j;
                 }
             }
             config.centroid[i]=minj;
         }
+    };
+    init.prototype.finish=function(){
+        for(var i=0;i<config.k;i++){
+            if(!config.oldCentroid.includes(config.centroid[i])){
+                return false;
+            }
+        }
+        return true;
+    };
+    init.prototype.getGroups=function(){
+        return config.groups;
+    };
+    init.prototype.do=function(centroid){
+        init.prototype.initialize(centroid);
+        while(!init.prototype.finish()){
+            init.prototype.assignment();
+            init.prototype.update();
+        }
+        return init.prototype.getGroups();
     };
     /*PrivateMethod*/
     function getDistance(a,b){
