@@ -1,3 +1,5 @@
+var relation;
+var attributes;
 var relationData=[];
 var kmeans;
 var result;
@@ -5,30 +7,36 @@ window.onload=function(){
     document.getElementById("btn-input").addEventListener("click",processData);
     document.getElementById("do-k-means").addEventListener("click",function(){
         var k=Number(document.getElementById("k").value);
-        var attributes=[];
+        var attributeList=[];
         var arr=document.getElementsByClassName("select-attribute");
         for(var i in arr){
             if(arr[i].checked){
-                attributes.push(arr[i].value);
+                attributeList.push(arr[i].value);
             }
         }
-        kmeans=new Kmeans(k,relationData,attributes,Kmeans.initOption.Forgy);
+        kmeans=new Kmeans(k,relationData,attributeList,Kmeans.initOption.Forgy);
         result=kmeans.do();
         console.log(result);
+        document.getElementById("result").value=getResult();
+        document.getElementById("show-result").classList.remove("hidden");
     });
 };
 function processData(){
     relationData.length=0;
     var data=document.getElementById("data").value.split("\n");
     var i;
-    var attributes=[];
+    attributes=[];
     var isnumeric=[];
     for(i=0;i<data.length;i++){
         if(data[i].includes("@relation")){
-            document.getElementById("relation-name").innerHTML=data[i].split(" ")[1];
+            relation=data[i].split(" ")[1];
+            document.getElementById("relation-name").innerHTML=relation;
         }else if(data[i].includes("@attribute")){
             var arr=data[i].split(" ");
-            attributes.push(arr[1]);
+            attributes.push({
+                Name:arr[1],
+                Type:arr[2],
+            });
             isnumeric.push(arr[2]=="numeric");
             var tr=document.createElement("tr");
             var td=document.createElement("td");
@@ -56,11 +64,43 @@ function processData(){
         var o={};
         for(var j=0;j<attributes.length;j++){
             if(isnumeric[j]){
-                o[attributes[j]]=Number(arr[j]);
+                o[attributes[j].Name]=Number(arr[j]);
             }else{
-                o[attributes[j]]=arr[j];
+                o[attributes[j].Name]=arr[j];
             }
         }
         relationData.push(o);
     }
+    document.getElementById("show-data").classList.remove("hidden");
+}
+function getResult(){
+    function getRow(o){
+        var str="";
+        for(var i=0;i<attributes.length;i++){
+            str+=o[attributes[i].Name]+",";
+        }
+        return str;
+    }
+    var resultStr="";
+    resultStr+="@relation "+relation+"\n\n";
+    for(var i in attributes){
+        resultStr+="@attribute "+attributes[i].Name+" "+attributes[i].Type+"\n";
+    }
+    resultStr+="@attribute group {1";
+    for(var i=1;i<result.length;i++){
+        resultStr+=","+(i+1);
+    }
+    resultStr+="}\n\n";
+    resultStr+="@data\n";
+    for(var i=0;i<relationData.length;i++){
+        resultStr+=getRow(relationData[i]);
+        for(var j=0;j<result.length;j++){
+            if(result[j].includes(i)){
+                resultStr+=(j+1);
+                break;
+            }
+        }
+        resultStr+="\n";
+    }
+    return resultStr;
 }
