@@ -26,6 +26,17 @@ window.onload=function(){
         document.getElementById("show-time").innerHTML=timerCount;
         document.getElementById("show-result").classList.remove("hidden");
     });
+    document.getElementById("download-result").addEventListener("click",function(){
+        var d=new Date();
+        var fileName="k-means_result"+d.toISOString()+".arff";
+        var fileContent=document.getElementById("result").value;
+        var file=new Blob([fileContent],{type: "text/plain"});
+        var a=document.createElement("a");
+        window.URL=window.URL||window.webkitURL;
+        a.setAttribute("href",window.URL.createObjectURL(file));
+        a.setAttribute("download",fileName);
+        a.click();
+    });
 };
 function processData(){
     relationData.length=0;
