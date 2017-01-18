@@ -11,6 +11,7 @@ var Kmeans=(function namespace(){
         for(var i=0;i<k;i++){
             config.groups[i]=[];
         }
+        config.c=0;
     }
     /*PublicMethod*/
     init.prototype.initialize=function(centroid){
@@ -54,6 +55,8 @@ var Kmeans=(function namespace(){
         }
     };
     init.prototype.update=function(){
+        config.c++;
+        console.log(config.c);
         //reset centroid
         config.oldCentroid=config.centroid.slice();
         config.centroid.length=0;
@@ -125,6 +128,7 @@ var Kmeans=(function namespace(){
         oldCentroid:null,
         centroid:null,
         initMethod:null,
+        c:null,
     };
     return init;
 }());
