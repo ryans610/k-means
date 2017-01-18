@@ -16,8 +16,9 @@ window.onload=function(){
                 attributeList.push(arr[i].value);
             }
         }
+        var init=document.getElementById("select-init").value;
         setTimer();
-        kmeans=new Kmeans(k,relationData,attributeList,Kmeans.initOption.Forgy);
+        kmeans=new Kmeans(k,relationData,attributeList,init);
         result=kmeans.do();
         clearTimer();
         console.log(result);
