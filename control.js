@@ -15,8 +15,9 @@ window.onload=function(){
             }
         }
         var init=document.getElementById("select-init").value;
+        var cycleLimit=Number(document.getElementById("cycle-limit").value);
         var initTime=new Date();
-        kmeans=new Kmeans(k,relationData,attributeList,init);
+        kmeans=new Kmeans(k,relationData,attributeList,init,cycleLimit);
         result=kmeans.do();
         var time=Math.abs(initTime-(new Date()));
         console.log(result);

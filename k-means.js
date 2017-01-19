@@ -1,6 +1,6 @@
 /*k-means clustering*/
 var Kmeans=(function namespace(){
-    function init(k,data,attributes,initMethod){
+    function init(k,data,attributes,initMethod,cycleLimit){
         config.k=k;
         config.data=data;
         config.attributes=attributes;
@@ -11,7 +11,8 @@ var Kmeans=(function namespace(){
         for(var i=0;i<k;i++){
             config.groups[i]=[];
         }
-        config.c=0;
+        config.cycle=0;
+        config.cycleLimit=cycleLimit;
     }
     /*PublicMethod*/
     init.prototype.initialize=function(centroid){
@@ -36,6 +37,7 @@ var Kmeans=(function namespace(){
         }
     };
     init.prototype.assignment=function(){
+        config.cycle++;
         //reset groups
         for(var i=0;i<config.k;i++){
             config.groups[i].length=0;
@@ -55,8 +57,6 @@ var Kmeans=(function namespace(){
         }
     };
     init.prototype.update=function(){
-        config.c++;
-        console.log(config.c);
         //reset centroid
         config.oldCentroid=config.centroid.slice();
         config.centroid.length=0;
@@ -87,6 +87,9 @@ var Kmeans=(function namespace(){
         }
     };
     init.prototype.finish=function(){
+        if(config.cycle>config.cycleLimit){
+            return true;
+        }
         for(var i=0;i<config.k;i++){
             if(!config.oldCentroid.includes(config.centroid[i])){
                 return false;
@@ -128,7 +131,8 @@ var Kmeans=(function namespace(){
         oldCentroid:null,
         centroid:null,
         initMethod:null,
-        c:null,
+        cycle:null,
+        cycleLimit:null,
     };
     return init;
 }());
