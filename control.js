@@ -3,8 +3,6 @@ var attributes;
 var relationData=[];
 var kmeans;
 var result;
-var timerId;
-var timerCount;
 window.onload=function(){
     document.getElementById("btn-input").addEventListener("click",processData);
     document.getElementById("do-k-means").addEventListener("click",function(){
@@ -17,13 +15,13 @@ window.onload=function(){
             }
         }
         var init=document.getElementById("select-init").value;
-        setTimer();
+        var initTime=new Date();
         kmeans=new Kmeans(k,relationData,attributeList,init);
         result=kmeans.do();
-        clearTimer();
+        var time=Math.abs(initTime-(new Date()));
         console.log(result);
         document.getElementById("result").value=getResult();
-        document.getElementById("show-time").innerHTML=timerCount;
+        document.getElementById("show-time").innerHTML=time;
         document.getElementById("show-result").classList.remove("hidden");
     });
     document.getElementById("download-result").addEventListener("click",function(){
@@ -120,11 +118,4 @@ function getResult(){
         resultStr+="\n";
     }
     return resultStr;
-}
-function setTimer(){
-    timerCount=0;
-    timerId=setInterval(function(){timerCount+=10;},10);
-}
-function clearTimer(){
-    clearInterval(timerId);
 }
