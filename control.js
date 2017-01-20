@@ -4,6 +4,16 @@ var relationData=[];
 var kmeans;
 var result;
 window.onload=function(){
+    document.getElementById("upload").addEventListener("change",function(e){
+        if(this.files.length>0){
+            var file=this.files[0];
+            var reader=new FileReader();
+            reader.onload=function(e){
+                document.getElementById("data").value=e.target.result;
+            };
+            reader.readAsText(file);
+        }
+    });
     document.getElementById("btn-input").addEventListener("click",processData);
     document.getElementById("do-k-means").addEventListener("click",function(){
         var k=Number(document.getElementById("k").value);
